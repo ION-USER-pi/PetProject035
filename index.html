@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>petproject035</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a2639;
+            --secondary: #3e4a61;
+            --accent: #00bcd4;
+            --light: #f8f9fa;
+            --dark: #121212;
+            --highlight: rgba(0, 188, 212, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px 0;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .network-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            background: var(--accent);
+            color: var(--dark);
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .hero {
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1.2s ease;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(0, 188, 212, 0.3);
+            animation: fadeInUp 1.4s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 188, 212, 0.4);
+        }
+        
+        main {
+            padding: 60px 0;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-header h2:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-icon {
+            background: var(--highlight);
+            color: var(--accent);
+            font-size: 36px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .card p {
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .card a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .card a span {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card a:hover span {
+            transform: translateX(5px);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+        
+        .timeline:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: var(--highlight);
+            border-radius: 2px;
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+        }
+        
+        .timeline-item:nth-child(even) {
+            text-align: left;
+            padding-left: calc(50% + 30px);
+            padding-right: 0;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            text-align: right;
+            padding-right: calc(50% + 30px);
+            padding-left: 0;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .timeline-year {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .interactive-diagram {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            min-height: 400px;
+        }
+        
+        .diagram-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .diagram-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .diagram-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .diagram-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.4);
+        }
+        
+        .node.active {
+            background: var(--primary);
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(26, 38, 57, 0.4);
+        }
+        
+        .connectors {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .info-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: none;
+        }
+        
+        .info-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .accordion {
+            margin-top: 40px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .accordion-item {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+        
+        .accordion-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .accordion-header:hover {
+            background: var(--highlight);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 20px;
+        }
+        
+        .accordion-content.active {
+            max-height: 500px;
+            padding: 0 20px 20px;
+        }
+        
+        .newsletter {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .newsletter h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+        }
+        
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .newsletter-btn:hover {
+            background: #00acc1;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        /* Dark mode toggle */
+        .theme-switch {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 188, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-switch:hover {
+            transform: translateY(-3px) rotate(30deg);
+            box-shadow: 0 6px 25px rgba(0, 188, 212, 0.4);
+        }
+        
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+        
+        body.dark-mode .card,
+        body.dark-mode .timeline-content,
+        body.dark-mode .interactive-diagram,
+        body.dark-mode .info-panel,
+        body.dark-mode .accordion {
+            background: #232323;
+            color: var(--light);
+        }
+        
+        body.dark-mode .section-header h2,
+        body.dark-mode .card h3 {
+            color: var(--accent);
+        }
+        
+        body.dark-mode .section-header p,
+        body.dark-mode .card p {
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                padding: 20px;
+                z-index: 10;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .timeline:before {
+                left: 30px;
+            }
+            
+            .timeline-item:nth-child(even),
+            .timeline-item:nth-child(odd) {
+                text-align: left;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            
+            .timeline-dot {
+                left: 30px;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switch" id="themeSwitch">
+        <i class="icon">🌓</i>
+    </div>
+    
+    <header>
+        <div class="network-lines" id="networkLines"></div>
+        <div class="particles" id="particles"></div>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span class="logo-icon">🔍</span>
+                    <span>SemantIQ</span>
+                </div>
+                <div class="nav-links" id="navLinks">
+                    <a href="#about">About</a>
+                    <a href="#evolution">Evolution</a>
+                    <a href="#technologies">Technologies</a>
+                    <a href="#future">Future</a>
+                    <a href="#resources">Resources</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            </nav>
+            
+            <div class="header-content">
+                <div class="hero">
+                    <h1>Knowledge Access and the Semantic Web</h1>
+                    <p>Explore how the Semantic Web is revolutionizing knowledge organization, discovery, and access in the digital age</p>
+                    <a href="#explore" class="cta-button">Explore Now</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>The Semantic Revolution</h2>
+                    <p>From a web of documents to a web of interconnected, machine-readable knowledge</p>
+                </div>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <div class="card-content">
+                            <h3>Beyond Simple Hyperlinks</h3>
+                            <p>The semantic web enhances traditional linking by adding meaning and context, transforming the internet from a collection of documents to a network of knowledge.</p>
+                            <a href="#">Learn more <span>→</span></a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🔄</div>
+                        <div class="card-content">
+                            <h3>Machines & Meaning</h3>
+                            <p>By structuring data with semantic markup, we enable machines to understand context and relationships between different pieces of information.</p>
+                            <a href="#">Learn more <span>→</span></a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🧩</div>
+                        <div class="card-content">
+                            <h3>Connected Knowledge</h3>
+                            <p>The semantic web connects dispersed information across domains, creating a global knowledge graph that transcends traditional information silos.</p>
+                            <a href="#">Learn more <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="evolution" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Evolution of the Semantic Web</h2>
+                    <p>From Tim Berners-Lee's vision to today's knowledge graphs</p>
+                </div>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1989-1990</div>
+                            <h3>Web 1.0 - The Beginning</h3>
+                            <p>Tim Berners-Lee invents the World Wide Web, focusing on linking documents and basic information sharing.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">1998-2001</div>
+                            <h3>The Semantic Vision</h3>
+                            <p>Berners-Lee introduces the concept of the Semantic Web, envisioning a web where machines can understand the meaning of information.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">2004-2006</div>
+                            <h3>Web 2.0 & Early Semantics</h3>
+                            <p>Social web emerges alongside early semantic technologies like RDF, OWL, and the first knowledge ontologies.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">2011-2015</div>
+                            <h3>Knowledge Graphs</h3>
+                            <p>Google introduces its Knowledge Graph, followed by similar initiatives from Facebook, Microsoft, and others.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-year">2018-Present</div>
+                            <h3>Web 3.0 & Beyond</h3>
+                            <p>Integration of semantic technologies with AI, machine learning, and decentralized networks creates new possibilities for knowledge access.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="technologies" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Core Technologies</h2>
+                    <p>The building blocks of the semantic knowledge web</p>
+                </div>
+                
+                <div class="interactive-diagram">
+                    <div class="diagram-container" id="diagramContainer">
+                        <!-- Nodes will be added via JavaScript -->
+                        <div class="connectors" id="connectors">
+                            <!-- Lines will be drawn via JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="diagram-controls">
+                        <button class="diagram-btn" id="resetBtn">Reset View</button>
+                        <button class="diagram-btn" id="expandBtn">Expand All</button>
+                    </div>
+                    
+                    <div class="info-panel" id="rdfPanel">
+                        <h3>RDF (Resource Description Framework)</h3>
+                        <p>The foundation of semantic web data modeling, RDF represents information as subject-predicate-object triples. This flexible structure allows for expressing virtually any knowledge relationship.</p>
+                        <pre><code>
+&lt;http://example.org/john&gt; &lt;http://example.org/knows&gt; &lt;http://example.org/jane&gt; .
+&lt;http://example.org/john&gt; &lt;http://example.org/age&gt; "42"^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt; .
+                        </code></pre>
+                    </div>
+                    
+                    <div class="info-panel" id="owlPanel">
+                        <h3>OWL (Web Ontology Language)</h3>
+                        <p>OWL extends RDF to create formal ontologies - structured vocabularies that define concepts, relationships, and constraints within a domain. OWL enables machines to reason about knowledge.</p>
+                        <pre><code>
+&lt;owl:Class rdf:about="http://example.org/Person"&gt;
+  &lt;rdfs:subClassOf rdf:resource="http://example.org/Agent"/&gt;
+&lt;/owl:Class&gt;
+                        </code></pre>
+                    </div>
+                    
+                    <div class="info-panel" id="sparqlPanel">
+                        <h3>SPARQL</h3>
+                        <p>The query language of the semantic web, SPARQL allows for complex queries across RDF datasets, uncovering relationships and extracting specific knowledge patterns.</p>
+                        <pre><code>
+SELECT ?person ?name
+WHERE {
+  ?person a ex:Researcher ;
+          ex:worksOn ex:SemanticWeb ;
+          ex:name ?name .
+}
+                        </code></pre>
+                    </div>
+                    
+                    <div class="info-panel" id="linkedDataPanel">
+                        <h3>Linked Data</h3>
+                        <p>A set of best practices for publishing structured data on the web, linked data connects disparate datasets through URIs, creating a global web of data that spans traditional boundaries.</p>
+                    </div>
+                    
+                    <div class="info-panel" id="schemaPanel">
+                        <h3>Schema.org</h3>
+                        <p>A collaborative vocabulary for structured data markup on web pages, schema.org helps search engines understand content and context, improving discoverability.</p>
+                        <pre><code>
+&lt;div itemscope itemtype="https://schema.org/Book"&gt;
+  &lt;span itemprop="name"&gt;The Semantic Web&lt;/span&gt;
+  &lt;span itemprop="author"&gt;Tim Berners-Lee&lt;/span&gt;
+&lt;/div&gt;
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="future" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>The Future of Knowledge Access</h2>
+                    <p>Emerging trends at the intersection of semantics, AI, and decentralized systems</p>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>AI-Powered Knowledge Navigation</span>
+                            <span>+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Next-generation AI systems leverage semantic structures to provide more accurate, context-aware knowledge retrieval. By understanding relationships between concepts, AI can navigate complex knowledge spaces and provide insights beyond keyword matching.</p>
+                            <p>Large language models integrated with knowledge graphs combine symbolic and neural approaches to knowledge representation, enabling more robust reasoning and factual accuracy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Decentralized Knowledge Networks</span>
+                            <span>+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Blockchain and distributed ledger technologies are enabling new paradigms for knowledge validation, attribution, and access. Decentralized knowledge bases can ensure provenance, manage access rights, and create new incentive models for knowledge sharing.</p>
+                            <p>Web3 technologies are creating permissionless knowledge ecosystems where contribution and access are democratized, challenging traditional gatekeeping models.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Multimodal Semantic Understanding</span>
+                            <span>+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Future semantic systems will understand and connect knowledge across text, images, video, audio, and other modalities. This creates richer contexts and enables more natural knowledge interactions through multiple sensory channels.</p>
+                            <p>Semantic understanding of multimedia content will unlock vast repositories of knowledge currently inaccessible to text-only search and retrieval systems.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Personal Knowledge Graphs</span>
+                            <span>+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Individual users will maintain personal knowledge graphs that map their interests, expertise, and digital interactions. These graphs will serve as interfaces between humans and the wider semantic web, personalizing knowledge access and discovery.</p>
+                            <p>Privacy-preserving techniques will allow personal knowledge to be selectively shared and connected to larger knowledge networks without compromising user autonomy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <span>Ambient Knowledge</span>
+                            <span>+</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>As IoT devices proliferate and computing becomes more ambient, semantic understanding will extend into physical spaces. Knowledge access will become contextual to location, activity, and environment.</p>
+                            <p>Augmented reality interfaces will overlay semantic information onto the physical world, creating hybrid knowledge spaces that blend digital and physical reality.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="resources" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Essential Resources</h2>
+                    <p>Tools and knowledge to master semantic web technologies</p>
+                </div>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-icon">📚</div>
+                        <div class="card-content">
+                            <h3>Learning Resources</h3>
+                            <p>Comprehensive guides, courses, and academic papers to understand semantic web principles and implementation.</p>
+                            <a href="#">Explore resources <span>→</span></a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🛠️</div>
+                        <div class="card-content">
+                            <h3>Development Tools</h3>
+                            <p>Libraries, frameworks, and tools for creating and working with semantic web technologies.</p>
+                            <a href="#">Discover tools <span>→</span></a>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">🧪</div>
+                        <div class="card-content">
+                            <h3>Research & Standards</h3>
+                            <p>Current research directions and W3C standards that shape the semantic web landscape.</p>
+                            <a href="#">View standards <span>→</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="newsletter" class="newsletter">
+            <div class="container">
+                <h2>Stay Informed</h2>
+                <p>Subscribe to our newsletter for the latest developments in semantic web technologies and knowledge access.</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email address">
+                    <button type="submit" class="newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>SemantIQ</h3>
+                    <p>Exploring the frontiers of knowledge access and semantic web technologies.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">T</a>
+                        <a href="#" class="social-link">L</a>
+                        <a href="#" class="social-link">G</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#evolution">Evolution</a></li>
+                        <li><a href="#technologies">Technologies</a></li>
+                        <li><a href="#future">Future</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API References</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Research Papers</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Licensing</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 SemantIQ. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        $(document).ready(function() {
+            // Mobile menu toggle
+            $('#mobileMenuToggle').click(function() {
+                $('#navLinks').toggleClass('active');
+            });
+            
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                
+                var target = this.hash;
+                var $target = $(target);
+                
+                $('html, body').stop().animate({
+                    'scrollTop': $target.offset().top - 70
+                }, 900, 'swing', function() {
+                    window.location.hash = target;
+                });
+            });
+            
+            // Intersection Observer for section animations
+            const sections = document.querySelectorAll('.section');
+            
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+            
+            // Network animation in header
+            function createNetworkAnimation() {
+                const networkEl = document.getElementById('networkLines');
+                const width = networkEl.offsetWidth;
+                const height = networkEl.offsetHeight;
+                
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("width", "100%");
+                svg.setAttribute("height", "100%");
+                networkEl.appendChild(svg);
+                
+                // Create nodes
+                const nodes = [];
+                for (let i = 0; i < 20; i++) {
+                    const node = {
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        el: document.createElementNS("http://www.w3.org/2000/svg", "circle")
+                    };
+                    
+                    node.el.setAttribute("cx", node.x);
+                    node.el.setAttribute("cy", node.y);
+                    node.el.setAttribute("r", 2);
+                    node.el.setAttribute("fill", "rgba(255,255,255,0.5)");
+                    
+                    svg.appendChild(node.el);
+                    nodes.push(node);
+                }
+                
+                // Create lines group
+                const linesGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                svg.appendChild(linesGroup);
+                
+                // Animation loop
+                function animate() {
+                    // Update node positions
+                    nodes.forEach(node => {
+                        node.x += node.vx;
+                        node.y += node.vy;
+                        
+                        // Bounce off walls
+                        if (node.x < 0 || node.x > width) node.vx *= -1;
+                        if (node.y < 0 || node.y > height) node.vy *= -1;
+                        
+                        // Update element
+                        node.el.setAttribute("cx", node.x);
+                        node.el.setAttribute("cy", node.y);
+                    });
+                    
+                    // Clear and redraw lines
+                    while (linesGroup.firstChild) {
+                        linesGroup.removeChild(linesGroup.firstChild);
+                    }
+                    
+                    // Draw lines between nodes that are close
+                    for (let i = 0; i < nodes.length; i++) {
+                        for (let j = i + 1; j < nodes.length; j++) {
+                            const nodeA = nodes[i];
+                            const nodeB = nodes[j];
+                            
+                            const dx = nodeA.x - nodeB.x;
+                            const dy = nodeA.y - nodeB.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (distance < 100) {
+                                const opacity = 1 - distance / 100;
+                                
+                                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                                line.setAttribute("x1", nodeA.x);
+                                line.setAttribute("y1", nodeA.y);
+                                line.setAttribute("x2", nodeB.x);
+                                line.setAttribute("y2", nodeB.y);
+                                line.setAttribute("stroke", `rgba(0, 188, 212, ${opacity})`);
+                                line.setAttribute("stroke-width", "1");
+                                
+                                linesGroup.appendChild(line);
+                            }
+                        }
+                    }
+                    
+                    requestAnimationFrame(animate);
+                }
+                
+                animate();
+            }
+            
+            createNetworkAnimation();
+            
+            // Particles animation
+            function createParticles() {
+                const particlesEl = document.getElementById('particles');
+                
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'absolute';
+                    particle.style.width = Math.random() * 5 + 2 + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animation = `fadeInUp ${Math.random() * 2 + 2}s ease infinite`;
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    particlesEl.appendChild(particle);
+                }
+            }
+            
+            createParticles();
+            
+            // Diagram nodes
+            function createDiagram() {
+                const container = document.getElementById('diagramContainer');
+                const connectorsEl = document.getElementById('connectors');
+                
+                // Create SVG for connectors
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("width", "100%");
+                svg.setAttribute("height", "100%");
+                connectorsEl.appendChild(svg);
+                
+                // Define nodes
+                const nodeData = [
+                    { id: 'rdf', label: 'RDF', x: 200, y: 100 },
+                    { id: 'owl', label: 'OWL', x: 100, y: 200 },
+                    { id: 'sparql', label: 'SPARQL', x: 300, y: 200 },
+                    { id: 'linkedData', label: 'Linked Data', x: 150, y: 300 },
+                    { id: 'schema', label: 'Schema.org', x: 250, y: 300 }
+                ];
+                
+                // Create nodes
+                nodeData.forEach(data => {
+                    const node = document.createElement('div');
+                    node.className = 'node';
+                    node.id = data.id + 'Node';
+                    node.textContent = data.label;
+                    node.style.left = data.x + 'px';
+                    node.style.top = data.y + 'px';
+                    
+                    node.addEventListener('click', function() {
+                        // Hide all panels
+                        document.querySelectorAll('.info-panel').forEach(panel => {
+                            panel.classList.remove('active');
+                        });
+                        
+                        // Remove active class from all nodes
+                        document.querySelectorAll('.node').forEach(n => {
+                            n.classList.remove('active');
+                        });
+                        
+                        // Show selected panel and activate node
+                        document.getElementById(data.id + 'Panel').classList.add('active');
+                        this.classList.add('active');
+                    });
+                    
+                    container.appendChild(node);
+                });
+                
+                // Draw connections
+                const connections = [
+                    { from: 'rdf', to: 'owl' },
+                    { from: 'rdf', to: 'sparql' },
+                    { from: 'rdf', to: 'linkedData' },
+                    { from: 'owl', to: 'linkedData' },
+                    { from: 'sparql', to: 'linkedData' },
+                    { from: 'linkedData', to: 'schema' }
+                ];
+                
+                connections.forEach(conn => {
+                    const fromNode = nodeData.find(n => n.id === conn.from);
+                    const toNode = nodeData.find(n => n.id === conn.to);
+                    
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", fromNode.x + 40);
+                    line.setAttribute("y1", fromNode.y + 40);
+                    line.setAttribute("x2", toNode.x + 40);
+                    line.setAttribute("y2", toNode.y + 40);
+                    line.setAttribute("stroke", "#00bcd4");
+                    line.setAttribute("stroke-width", "2");
+                    line.setAttribute("stroke-dasharray", "5,5");
+                    
+                    svg.appendChild(line);
+                });
+                
+                // Reset button
+                document.getElementById('resetBtn').addEventListener('click', function() {
+                    document.querySelectorAll('.info-panel').forEach(panel => {
+                        panel.classList.remove('active');
+                    });
+                    
+                    document.querySelectorAll('.node').forEach(node => {
+                        node.classList.remove('active');
+                    });
+                });
+                
+                // Expand all button
+                document.getElementById('expandBtn').addEventListener('click', function() {
+                    document.getElementById('rdfPanel').classList.add('active');
+                    document.getElementById('owlPanel').classList.add('active');
+                    document.getElementById('sparqlPanel').classList.add('active');
+                    document.getElementById('linkedDataPanel').classList.add('active');
+                    document.getElementById('schemaPanel').classList.add('active');
+                    
+                    document.querySelectorAll('.node').forEach(node => {
+                        node.classList.add('active');
+                    });
+                });
+            }
+            
+            setTimeout(createDiagram, 500);
+            
+            // Accordion functionality
+            $('.accordion-header').click(function() {
+                const content = $(this).next('.accordion-content');
+                const isActive = content.hasClass('active');
+                
+                // Close all accordion items
+                $('.accordion-content').removeClass('active');
+                $('.accordion-header span:last-child').text('+');
+                
+                // Open clicked item if it was closed
+                if (!isActive) {
+                    content.addClass('active');
+                    $(this).find('span:last-child').text('−');
+                }
+            });
+            
+            // Dark mode toggle
+            $('#themeSwitch').click(function() {
+                $('body').toggleClass('dark-mode');
+            });
+        });
+    </script>
+</body>
+</html>
